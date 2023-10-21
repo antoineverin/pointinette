@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import fr.antoineverin.worktime.ADD_ENTRY
+import fr.antoineverin.worktime.LIST_ENTRIES
 import fr.antoineverin.worktime.ui.viewmodel.MainScreenViewModel
 import java.time.Duration
 import java.time.YearMonth
@@ -35,8 +35,12 @@ fun MainScreen(
             hoursObjective = viewModel.getHoursObjective()
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = { navigate(ADD_ENTRY) }) {
+        Button(onClick = { viewModel.addEntry(navigate) }) {
             Text(text = "Work!")
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = { navigate(LIST_ENTRIES) }) {
+            Text(text = "List entries")
         }
     }
 

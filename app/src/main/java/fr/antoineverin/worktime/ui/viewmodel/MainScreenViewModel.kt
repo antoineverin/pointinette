@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import fr.antoineverin.worktime.EDIT_ENTRY
 import fr.antoineverin.worktime.database.dao.TimeSpentDao
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -25,7 +26,15 @@ class MainScreenViewModel @Inject constructor(
         return 150
     }
 
-    suspend fun fetchTimeSpentSummary() {
+    fun addEntry(navigate: (String) -> Unit) {
+        viewModelScope.launch {
+            val entry = timeSpentDao.getLastTimeSpent()
+            if (entry == null || entry.to != null)  navigate("$EDIT_ENTRY/0")
+            else                                    navigate("$EDIT_ENTRY/${entry.id}")
+        }
+    }
+
+    fun fetchTimeSpentSummary() {
         viewModelScope.launch {
             var time = Duration.ZERO
             timeSpentDao.getTimeSpentFromPeriod(YearMonth.now().toString()).forEach {

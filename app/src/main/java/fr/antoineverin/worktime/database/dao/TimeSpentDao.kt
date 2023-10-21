@@ -10,6 +10,9 @@ interface TimeSpentDao: WtDao<TimeSpent> {
     @Query("SELECT * FROM time_spent")
     suspend fun getAllTimeSpent(): List<TimeSpent>
 
+    @Query("SELECT * FROM time_spent WHERE id = :id")
+    suspend fun getTimeSpent(id: Int): TimeSpent
+
     @Query("SELECT * FROM time_spent WHERE period = :period")
     suspend fun getTimeSpentFromPeriod(period: String): List<TimeSpent>
 
