@@ -7,7 +7,7 @@ import fr.antoineverin.worktime.database.entities.TimeSpent
 @Dao
 interface TimeSpentDao: WtDao<TimeSpent> {
 
-    @Query("SELECT * FROM time_spent")
+    @Query("SELECT * FROM time_spent ORDER BY date")
     suspend fun getAllTimeSpent(): List<TimeSpent>
 
     @Query("SELECT * FROM time_spent WHERE id = :id")

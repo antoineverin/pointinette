@@ -46,6 +46,7 @@ fun MainScreen(
 
     LaunchedEffect(viewModel) {
         viewModel.fetchTimeSpentSummary()
+        viewModel.fetchLastEntry()
     }
 }
 
