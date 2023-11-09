@@ -67,7 +67,7 @@ private fun TimeSpentSummary(
         if(hoursSpent == null)
             Text(text = "...")
         else
-            Text(text = "" + hoursSpent.toHours() + "h")
+            Text(text = "" + hoursSpent.toHours() + "h " + hoursSpent.toMinutes() % 60 + "m")
         Text(text = "/")
         Text(text = "" + hoursObjective + "h")
     }
