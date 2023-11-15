@@ -9,7 +9,9 @@ import fr.antoineverin.worktime.database.dao.TimeSpentDao
 import fr.antoineverin.worktime.database.entities.TimeSpent
 import kotlinx.coroutines.launch
 import java.time.Duration
+import java.time.LocalTime
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +28,22 @@ class MainScreenViewModel @Inject constructor(
 
     fun getHoursObjective(): Int {
         return 140
+    }
+
+    fun getAtWorkSince(): LocalTime? {
+        return lastEntry.value?.from
+    }
+
+    fun isAtWork(): Boolean {
+        return lastEntry.value != null && lastEntry.value!!.to == null
+    }
+
+    fun getWorkDuration(since: LocalTime): String {
+        return LocalTime.ofSecondOfDay(
+            Duration.ofSeconds(LocalTime.now().toSecondOfDay().toLong())
+                .minusSeconds(since.toSecondOfDay().toLong())
+                .seconds
+        ).format(DateTimeFormatter.ofPattern("HH'h' mm'm'"))
     }
 
     fun addEntry(navigate: (String) -> Unit) {
