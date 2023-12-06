@@ -65,13 +65,23 @@ private fun EntryItem(
             Modifier
                 .fillMaxWidth(.75f)
                 .padding(5.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(text = entry.date.format(DateTimeFormatter.ofPattern("EEEE dd")))
                 Text(text = entry.formatDuration())
             }
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(text = entry.period.format(DateTimeFormatter.ofPattern("MMMM yyyy")))
-                Text(text = entry.getDuration()?.toHours().toString() + "h")
+                if (entry.getDuration() != null)
+                    Text(text = entry.getDuration()!!.toHours().toString() + "h " +
+                            entry.getDuration()!!.toMinutes() % 60 + "m")
+                else
+                    Text(text = "Pending..")
             }
         }
         IconButton(onClick = { edit(entry) }) {
