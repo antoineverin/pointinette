@@ -14,8 +14,8 @@ android {
         applicationId = "fr.antoineverin.worktime"
         minSdk = 30
         targetSdk = 34
-        versionCode = 5
-        versionName = "1.2"
+        versionCode = 7
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
