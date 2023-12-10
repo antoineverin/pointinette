@@ -18,9 +18,7 @@ class ListEntriesViewModel @Inject constructor(
 
     fun fetchEntries() {
         viewModelScope.launch {
-            val list = timeSpentDao.getAllTimeSpent()
-            print(list.count())
-            entries.addAll(list)
+            entries.addAll(timeSpentDao.getAllTimeSpent())
         }
     }
 
