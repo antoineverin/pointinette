@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditEntryViewModel @Inject constructor(
-    val timeSpentDao: TimeSpentDao
+    private val timeSpentDao: TimeSpentDao
 ): ViewModel() {
 
     private lateinit var entry: TimeSpent
@@ -61,7 +61,9 @@ class EditEntryViewModel @Inject constructor(
     fun checkInputValidity() {
         if (date.value.isEmpty() || from.value.isEmpty())
             isValid.value = false
-        isValid.value = date.value.isValid() && from.value.isValid() && (to.value.isEmpty() || to.value.isValid())
+        else
+            isValid.value = date.value.isValid() && from.value.isValid()
+                    && (to.value.isEmpty() || to.value.isValid())
     }
 
     private fun setupWithEntry(entry: TimeSpent) {
