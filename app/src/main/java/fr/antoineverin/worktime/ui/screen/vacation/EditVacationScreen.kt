@@ -42,7 +42,7 @@ fun EditVacationScreen(
             )
         }
         Spacer(Modifier.height(13.dp))
-        Label(name = "Jours") {
+        Label(name = "Jours ouvrés") {
             NumberField(
                 label = "Jours",
                 value = viewModel.days.value,
