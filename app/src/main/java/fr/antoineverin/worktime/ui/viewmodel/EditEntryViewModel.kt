@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditEntryViewModel @Inject constructor(
-    val timeSpentDao: TimeSpentDao
+    private val timeSpentDao: TimeSpentDao
 ): ViewModel() {
 
     private lateinit var entry: TimeSpent
@@ -43,6 +43,8 @@ class EditEntryViewModel @Inject constructor(
     }
 
     fun pushEntry(popUp: () -> Unit) {
+        if (!checkInputValidity())
+            return
         viewModelScope.launch {
             entry.date = date.value.toLocalDate()
             entry.period = YearMonth.of(entry.date.year, entry.date.monthValue)
@@ -58,10 +60,13 @@ class EditEntryViewModel @Inject constructor(
         }
     }
 
-    fun checkInputValidity() {
+    fun checkInputValidity(): Boolean {
         if (date.value.isEmpty() || from.value.isEmpty())
             isValid.value = false
-        isValid.value = date.value.isValid() && from.value.isValid() && (to.value.isEmpty() || to.value.isValid())
+        else
+            isValid.value = date.value.isValid() && from.value.isValid()
+                    && (to.value.isEmpty() || to.value.isValid())
+        return isValid.value
     }
 
     private fun setupWithEntry(entry: TimeSpent) {
