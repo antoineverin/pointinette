@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,7 +44,7 @@ fun ListVacationScreen(
             }
         }
     ) { paddingValues ->
-        LazyColumn(Modifier.height(paddingValues.calculateTopPadding())) {
+        LazyColumn(Modifier.padding(paddingValues)) {
             items(
                 items = viewModel.vacations,
                 key = { vacation -> vacation.id }
@@ -58,7 +57,6 @@ fun ListVacationScreen(
             }
         }
     }
-
 
     LaunchedEffect(viewModel) {
         viewModel.vacations.clear()

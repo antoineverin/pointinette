@@ -64,6 +64,7 @@ class EditVacationViewModel @Inject constructor(
             vacation.period.monthValue.toString(),
             vacation.period.year.toString())
         days.value = vacation.days.toString()
+        checkFieldsValidity()
     }
 
 }
