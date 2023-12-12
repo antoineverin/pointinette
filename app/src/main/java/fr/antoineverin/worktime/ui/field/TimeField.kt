@@ -35,7 +35,7 @@ fun TimeField(
             label = "Hour",
             value = value.hours,
             onValueChange = { onValueChange(value.copy(hours = it)) },
-            checkValue = { checkDigitAndRange(it, 0..24) },
+            checkValue = { checkDigitAndRange(it, 0..23) },
             focusManager = focusManager,
             modifier = Modifier.weight(1f)
         )
