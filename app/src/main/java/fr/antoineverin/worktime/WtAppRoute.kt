@@ -7,6 +7,7 @@ import androidx.navigation.navArgument
 import fr.antoineverin.worktime.ui.screen.EditEntryScreen
 import fr.antoineverin.worktime.ui.screen.ListEntriesScreen
 import fr.antoineverin.worktime.ui.screen.MainScreen
+import fr.antoineverin.worktime.ui.screen.vacation.EditVacationScreen
 import fr.antoineverin.worktime.ui.screen.vacation.ListVacationScreen
 
 fun NavGraphBuilder.wtAppRoute(appState: WtAppState) {
@@ -19,6 +20,14 @@ fun NavGraphBuilder.wtAppRoute(appState: WtAppState) {
         backEntryStack.arguments?.getInt("entryId")?.let { EditEntryScreen(it, { appState.popUp() }) }
     }
     composable(LIST_VACATION) { ListVacationScreen({ appState.navigate(it) }) }
+    composable(
+        route = "$EDIT_VACATION/{vacationId}",
+        arguments = listOf(navArgument("vacationId") { type = NavType.IntType })
+    ) { backStackEntry ->
+        backStackEntry.arguments?.getInt("vacationId")?.let { EditVacationScreen(
+            vacationId = it,
+            popUp = { appState.popUp() }) }
+    }
 }
 
 const val HOME_ROUTE = "home"
