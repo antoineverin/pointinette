@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.antoineverin.worktime.ui.field.Label
@@ -44,12 +45,14 @@ fun EditVacationScreen(
         Label(name = "Jours") {
             NumberField(
                 label = "Jours",
-                value = viewModel.days.intValue.toString(),
+                value = viewModel.days.value,
                 onValueChange = {
-                    viewModel.days.intValue = it.toInt(); viewModel.checkFieldsValidity()
+                    viewModel.days.value = it; viewModel.checkFieldsValidity()
                 },
-                checkValue = { it.toInt() > 0 },
-                focusManager = focusManager
+                checkValue = { true },
+                focusManager = focusManager,
+                imeAction = ImeAction.Next,
+                action = { viewModel.pushEntry(popUp) }
             )
         }
         Spacer(Modifier.height(24.dp))

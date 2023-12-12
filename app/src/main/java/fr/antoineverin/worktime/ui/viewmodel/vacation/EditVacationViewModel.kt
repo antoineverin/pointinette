@@ -1,6 +1,5 @@
 package fr.antoineverin.worktime.ui.viewmodel.vacation
 
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +18,7 @@ class EditVacationViewModel @Inject constructor(
 
     private lateinit var vacation: Vacation
     val period = mutableStateOf(YearMonthValue("", ""))
-    val days = mutableIntStateOf(0)
+    val days = mutableStateOf("0")
     val isValid = mutableStateOf(false)
 
     fun fetchEntry(id: Int) {
@@ -33,16 +32,22 @@ class EditVacationViewModel @Inject constructor(
         }
     }
 
-    fun checkFieldsValidity() {
-        if (period.value.isValid())
+    fun checkFieldsValidity(): Boolean {
+        if (period.value.isEmpty() || days.value.isEmpty())
             isValid.value = false
         else
-            isValid.value = period.value.isValid() && days.intValue >= 0
+            isValid.value = period.value.isValid()
+                    && days.value.toIntOrNull() != null
+                    && days.value.toInt() > 0
+        return isValid.value
     }
 
     fun pushEntry(popUp: () -> Unit) {
+        if (!checkFieldsValidity())
+            return
+
         vacation.period = period.value.toYearMonth()
-        vacation.days = days.intValue
+        vacation.days = days.value.toInt()
 
         viewModelScope.launch {
             if (vacation.id == 0)
@@ -56,9 +61,9 @@ class EditVacationViewModel @Inject constructor(
     private fun setupFields(vacation: Vacation) {
         this.vacation = vacation
         period.value = YearMonthValue(
-            vacation.period.month.toString(),
+            vacation.period.monthValue.toString(),
             vacation.period.year.toString())
-        days.intValue = vacation.days
+        days.value = vacation.days.toString()
     }
 
 }
