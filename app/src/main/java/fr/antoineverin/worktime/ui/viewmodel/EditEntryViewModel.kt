@@ -43,7 +43,7 @@ class EditEntryViewModel @Inject constructor(
     }
 
     fun pushEntry(popUp: () -> Unit) {
-        if (!checkInputValidity())
+        if (!isValid.value)
             return
         viewModelScope.launch {
             entry.date = date.value.toLocalDate()
