@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.antoineverin.worktime.ui.field.DateField
+import fr.antoineverin.worktime.ui.field.Label
 import fr.antoineverin.worktime.ui.field.TimeField
 import fr.antoineverin.worktime.ui.viewmodel.EditEntryViewModel
 
@@ -70,14 +71,7 @@ fun EditEntryScreen(
     }
 }
 
-@Composable
-private fun Label(name: String, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    Column(modifier = modifier) {
-        Text(text = name)
-        Spacer(Modifier.height(5.dp))
-        content()
-    }
-}
+
 
 fun checkDigitAndRange(value: String, range: IntRange): Boolean {
     return value.isDigitsOnly() && (value == "" || value.toInt() in range)

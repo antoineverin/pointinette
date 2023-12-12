@@ -1,11 +1,13 @@
 package fr.antoineverin.worktime.ui.viewmodel
 
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.antoineverin.worktime.EDIT_ENTRY
 import fr.antoineverin.worktime.database.dao.TimeSpentDao
+import fr.antoineverin.worktime.database.dao.VacationDao
 import fr.antoineverin.worktime.database.entities.TimeSpent
 import kotlinx.coroutines.launch
 import java.time.Duration
@@ -16,10 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val timeSpentDao: TimeSpentDao
+    private val timeSpentDao: TimeSpentDao,
+    private val vacationDao: VacationDao
 ): ViewModel() {
 
     private var timeSpentSummary = mutableStateOf<Duration?>(null)
+    private var hoursObjective = mutableIntStateOf(140)
     private var lastEntry = mutableStateOf<TimeSpent?>(null)
 
     fun getTimeSpentSummary(): Duration? {
@@ -27,7 +31,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun getHoursObjective(): Int {
-        return 140
+        return hoursObjective.intValue
     }
 
     fun getAtWorkSince(): LocalTime? {
@@ -66,6 +70,11 @@ class MainScreenViewModel @Inject constructor(
                 }
             }
             timeSpentSummary.value = time
+            var hours = 140
+            vacationDao.getAllFromPeriod(YearMonth.now().toString()).forEach {
+                hours -= 7 * it.days
+            }
+            hoursObjective.intValue = hours
         }
     }
 

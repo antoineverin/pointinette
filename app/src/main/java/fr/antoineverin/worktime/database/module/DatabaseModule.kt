@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import fr.antoineverin.worktime.database.WtDatabase
 import fr.antoineverin.worktime.database.dao.TimeSpentDao
+import fr.antoineverin.worktime.database.dao.VacationDao
 import javax.inject.Singleton
 
 @Module
@@ -24,6 +25,11 @@ class DatabaseModule {
     @Provides
     fun providesTimeSpentDao(database: WtDatabase): TimeSpentDao {
         return database.timeSpentDao()
+    }
+
+    @Provides
+    fun providesVacationDao(database: WtDatabase): VacationDao {
+        return database.vacationDao()
     }
 
 }
