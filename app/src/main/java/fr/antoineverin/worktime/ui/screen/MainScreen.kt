@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.antoineverin.worktime.LIST_ENTRIES
+import fr.antoineverin.worktime.LIST_VACATION
 import fr.antoineverin.worktime.ui.viewmodel.MainScreenViewModel
 import java.time.Duration
 import java.time.LocalTime
@@ -53,6 +54,10 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = { navigate(LIST_ENTRIES) }) {
             Text(text = "List entries")
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(onClick = { navigate(LIST_VACATION) }) {
+            Text(text = "List vacations")
         }
     }
 
