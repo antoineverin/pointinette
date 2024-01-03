@@ -16,6 +16,9 @@ interface TimeSpentDao: WtDao<TimeSpent> {
     @Query("SELECT * FROM time_spent WHERE period = :period")
     suspend fun getTimeSpentFromPeriod(period: String): List<TimeSpent>
 
+    @Query("SELECT * FROM time_spent WHERE date = :date")
+    suspend fun getTimeSpentFromDay(date: Long): List<TimeSpent>
+
     @Query("SELECT * FROM time_spent WHERE id = (SELECT max(id) FROM time_spent)")
     suspend fun getLastTimeSpent(): TimeSpent?
 

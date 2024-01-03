@@ -26,9 +26,10 @@ data class TimeSpent(
     }
 
     fun getDuration(): Duration? {
-        if(to == null) return null
-        return Duration.ofSeconds(to!!.toSecondOfDay().toLong())
-            .minusSeconds(from.toSecondOfDay().toLong())
+        var duration = Duration.ZERO
+        duration =  if(to == null) duration.plusSeconds(LocalTime.now().toSecondOfDay().toLong())
+                    else duration.plusSeconds(to!!.toSecondOfDay().toLong())
+        return duration.minusSeconds(from.toSecondOfDay().toLong())
     }
 
 }

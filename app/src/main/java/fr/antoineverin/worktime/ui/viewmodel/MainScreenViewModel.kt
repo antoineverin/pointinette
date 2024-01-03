@@ -1,5 +1,6 @@
 package fr.antoineverin.worktime.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import fr.antoineverin.worktime.database.dao.VacationDao
 import fr.antoineverin.worktime.database.entities.TimeSpent
 import kotlinx.coroutines.launch
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -23,6 +25,7 @@ class MainScreenViewModel @Inject constructor(
 ): ViewModel() {
 
     private var timeSpentSummary = mutableStateOf<Duration?>(null)
+    private var currentDayTimeSpent = mutableStateOf<Duration?>(null)
     private var hoursObjective = mutableIntStateOf(140)
     private var lastEntry = mutableStateOf<TimeSpent?>(null)
 
@@ -34,20 +37,11 @@ class MainScreenViewModel @Inject constructor(
         return hoursObjective.intValue
     }
 
-    fun getAtWorkSince(): LocalTime? {
-        return lastEntry.value?.from
-    }
-
-    fun isAtWork(): Boolean {
-        return lastEntry.value != null && lastEntry.value!!.to == null
-    }
-
-    fun getWorkDuration(since: LocalTime): String {
-        return LocalTime.ofSecondOfDay(
-            Duration.ofSeconds(LocalTime.now().toSecondOfDay().toLong())
-                .minusSeconds(since.toSecondOfDay().toLong())
-                .seconds
-        ).format(DateTimeFormatter.ofPattern("HH'h' mm'm'"))
+    fun getCurrentDayTimeSpent(): String? {
+        if (currentDayTimeSpent.value == null || currentDayTimeSpent.value == Duration.ZERO)
+            return null
+        return LocalTime.ofSecondOfDay(currentDayTimeSpent.value!!.seconds)
+            .format(DateTimeFormatter.ofPattern("HH'h' mm'm'"))
     }
 
     fun addEntry(navigate: (String) -> Unit) {
@@ -69,6 +63,8 @@ class MainScreenViewModel @Inject constructor(
                     time = time.plus(ld)
                 }
             }
+            
+            // Calculating month's hours objectives
             timeSpentSummary.value = time
             var hours = 140
             vacationDao.getAllFromPeriod(YearMonth.now().toString()).forEach {
@@ -78,9 +74,15 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun fetchLastEntry() {
+    fun fetchCurrentDayEntries() {
         viewModelScope.launch {
-            lastEntry.value = timeSpentDao.getLastTimeSpent()
+            var duration = Duration.ZERO
+            Log.d("time", LocalDate.now().toEpochDay().toString())
+            timeSpentDao.getTimeSpentFromDay(LocalDate.now().toEpochDay()).forEach { entry ->
+                Log.d("time", "founded")
+                duration = duration.plus(entry.getDuration())
+            }
+            currentDayTimeSpent.value = duration
         }
     }
 
