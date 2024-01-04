@@ -76,10 +76,12 @@ class MainScreenViewModel @Inject constructor(
     fun fetchCurrentDayEntries() {
         viewModelScope.launch {
             var duration = Duration.ZERO
-            timeSpentDao.getTimeSpentFromDay(LocalDate.now().toEpochDay()).forEach { entry ->
+            val entries = timeSpentDao.getTimeSpentFromDay(LocalDate.now().toEpochDay())
+            entries.forEach { entry ->
                 duration = duration.plus(entry.getDuration())
             }
             currentDayTimeSpent.value = duration
+            lastEntry.value = if (entries.isEmpty()) null else entries.last()
         }
     }
 
