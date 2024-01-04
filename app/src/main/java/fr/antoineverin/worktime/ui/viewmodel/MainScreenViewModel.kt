@@ -1,6 +1,5 @@
 package fr.antoineverin.worktime.ui.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -77,9 +76,7 @@ class MainScreenViewModel @Inject constructor(
     fun fetchCurrentDayEntries() {
         viewModelScope.launch {
             var duration = Duration.ZERO
-            Log.d("time", LocalDate.now().toEpochDay().toString())
             timeSpentDao.getTimeSpentFromDay(LocalDate.now().toEpochDay()).forEach { entry ->
-                Log.d("time", "founded")
                 duration = duration.plus(entry.getDuration())
             }
             currentDayTimeSpent.value = duration
