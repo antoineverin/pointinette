@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fr.antoineverin.worktime.LIST_ENTRIES
 import fr.antoineverin.worktime.LIST_VACATION
@@ -19,6 +21,7 @@ import java.time.Duration
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
+import kotlin.math.absoluteValue
 
 @Composable
 fun MainScreen(
@@ -32,7 +35,7 @@ fun MainScreen(
         CurrentPeriod(period = YearMonth.now())
         Spacer(modifier = Modifier.height(24.dp))
         TimeSpentSummary(
-            hoursSpent = viewModel.getTimeSpentSummary(),
+            hoursSpent = viewModel.getTimeDone(),
             hoursObjective = viewModel.getHoursObjective()
         )
         if (viewModel.getCurrentDayTimeSpent() != null) {
@@ -40,6 +43,19 @@ fun MainScreen(
             Text(text = "Today you've worked:")
             Text(text = viewModel.getCurrentDayTimeSpent()!!)
         }
+        Spacer(modifier = Modifier.height(24.dp))
+        val remainingDifference = viewModel.getRemainingHoursDifference()
+        if (remainingDifference != null)
+            Text(
+                text = "${remainingDifference.toHours()}h " +
+                        "${remainingDifference.toMinutes().absoluteValue % 60}m",
+                color = if (remainingDifference.isNegative) Color.Red else Color.Green,
+                fontSize = 13.sp
+            )
+        val remainingHours = viewModel.getRemainingHoursPerDay()
+        if (remainingHours != null)
+            Text(text = "Should do ${remainingHours.toHours()}h " +
+                    "${remainingHours.toMinutes() % 60}m / days")
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = { viewModel.addEntry(navigate) }) {
             Text(text = "Work!")
