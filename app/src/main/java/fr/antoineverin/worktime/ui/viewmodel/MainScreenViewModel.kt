@@ -9,6 +9,8 @@ import fr.antoineverin.worktime.EDIT_ENTRY
 import fr.antoineverin.worktime.database.dao.TimeSpentDao
 import fr.antoineverin.worktime.database.dao.VacationDao
 import fr.antoineverin.worktime.database.entities.TimeSpent
+import fr.antoineverin.worktime.utils.calculateHoursDifference
+import fr.antoineverin.worktime.utils.calculateHoursPerDays
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDate
@@ -28,12 +30,22 @@ class MainScreenViewModel @Inject constructor(
     private var hoursObjective = mutableIntStateOf(140)
     private var lastEntry = mutableStateOf<TimeSpent?>(null)
 
-    fun getTimeSpentSummary(): Duration? {
+    fun getTimeDone(): Duration? {
         return timeSpentSummary.value
     }
 
     fun getHoursObjective(): Int {
         return hoursObjective.intValue
+    }
+
+    fun getRemainingHoursPerDay(): Duration? {
+        if (getTimeDone() == null) return null
+        return calculateHoursPerDays(LocalDate.now(), getTimeDone()!!, getHoursObjective())
+    }
+
+    fun getRemainingHoursDifference(): Duration? {
+        if (getTimeDone() == null)  return null
+        return calculateHoursDifference(LocalDate.now(), getTimeDone()!!, getHoursObjective())
     }
 
     fun getCurrentDayTimeSpent(): String? {

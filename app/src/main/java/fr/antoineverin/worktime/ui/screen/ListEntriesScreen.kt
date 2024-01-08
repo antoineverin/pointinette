@@ -77,11 +77,8 @@ private fun EntryItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = entry.period.format(DateTimeFormatter.ofPattern("MMMM yyyy")))
-                if (entry.getDuration() != null)
-                    Text(text = entry.getDuration()!!.toHours().toString() + "h " +
-                            entry.getDuration()!!.toMinutes() % 60 + "m")
-                else
-                    Text(text = "Pending..")
+                Text(text = entry.getDuration().toHours().toString() + "h " +
+                        entry.getDuration().toMinutes() % 60 + "m")
             }
         }
         IconButton(onClick = { edit(entry) }) {
