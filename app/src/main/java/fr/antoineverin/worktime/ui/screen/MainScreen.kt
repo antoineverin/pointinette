@@ -44,18 +44,21 @@ fun MainScreen(
             Text(text = viewModel.getCurrentDayTimeSpent()!!)
         }
         Spacer(modifier = Modifier.height(24.dp))
-        val remainingDifference = viewModel.getRemainingHoursDifference()
-        if (remainingDifference != null)
-            Text(
-                text = "${remainingDifference.toHours()}h " +
-                        "${remainingDifference.toMinutes().absoluteValue % 60}m",
-                color = if (remainingDifference.isNegative) Color.Red else Color.Green,
-                fontSize = 13.sp
-            )
-        val remainingHours = viewModel.getRemainingHoursPerDay()
-        if (remainingHours != null)
-            Text(text = "Should do ${remainingHours.toHours()}h " +
-                    "${remainingHours.toMinutes() % 60}m / days")
+        if (viewModel.getTimeDone() != null
+            && viewModel.getTimeDone()!!.toHours() < viewModel.getHoursObjective()) {
+            val remainingDifference = viewModel.getRemainingHoursDifference()
+            if (remainingDifference != null)
+                Text(
+                    text = "${remainingDifference.toHours()}h " +
+                            "${remainingDifference.toMinutes().absoluteValue % 60}m",
+                    color = if (remainingDifference.isNegative) Color.Red else Color.Green,
+                    fontSize = 13.sp
+                )
+            val remainingHours = viewModel.getRemainingHoursPerDay()
+            if (remainingHours != null)
+                Text(text = "Should do ${remainingHours.toHours()}h " +
+                        "${remainingHours.toMinutes() % 60}m / days")
+        }
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = { viewModel.addEntry(navigate) }) {
             Text(text = "Work!")
