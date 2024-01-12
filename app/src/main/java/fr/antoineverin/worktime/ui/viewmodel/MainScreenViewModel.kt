@@ -28,6 +28,7 @@ class MainScreenViewModel @Inject constructor(
     private var timeSpentSummary = mutableStateOf<Duration?>(null)
     private var currentDayTimeSpent = mutableStateOf<Duration?>(null)
     private var hoursObjective = mutableIntStateOf(140)
+    private var daysOff = mutableIntStateOf(0)
     private var lastEntry = mutableStateOf<TimeSpent?>(null)
 
     fun getTimeDone(): Duration? {
@@ -35,7 +36,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun getHoursObjective(): Int {
-        return hoursObjective.intValue
+        return hoursObjective.intValue - daysOff.intValue
     }
 
     fun getRemainingHoursPerDay(): Duration? {
@@ -45,7 +46,7 @@ class MainScreenViewModel @Inject constructor(
 
     fun getRemainingHoursDifference(): Duration? {
         if (getTimeDone() == null)  return null
-        return calculateHoursDifference(LocalDate.now(), getTimeDone()!!, getHoursObjective())
+        return calculateHoursDifference(LocalDate.now(), getTimeDone()!!, getHoursObjective(), daysOff.intValue)
     }
 
     fun getCurrentDayTimeSpent(): String? {
@@ -64,7 +65,14 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun fetchTimeSpentSummary() {
+    fun fetchAll()
+    {
+        fetchTimeSpentSummary()
+        fetchCurrentDayEntries()
+        fetchCurrentMonthDaysOff()
+    }
+
+    private fun fetchTimeSpentSummary() {
         viewModelScope.launch {
             var time = Duration.ZERO
             timeSpentDao.getTimeSpentFromPeriod(YearMonth.now().toString()).forEach {
@@ -74,18 +82,16 @@ class MainScreenViewModel @Inject constructor(
                     time = time.plus(ld)
                 }
             }
-            
-            // Calculating month's hours objectives
-            timeSpentSummary.value = time
-            var hours = 140
-            vacationDao.getAllFromPeriod(YearMonth.now().toString()).forEach {
-                hours -= 7 * it.days
-            }
-            hoursObjective.intValue = hours
         }
     }
 
-    fun fetchCurrentDayEntries() {
+    private fun fetchCurrentMonthDaysOff() {
+        viewModelScope.launch {
+            daysOff.intValue = vacationDao.getAllFromPeriod(YearMonth.now().toString()).size
+        }
+    }
+
+    private fun fetchCurrentDayEntries() {
         viewModelScope.launch {
             var duration = Duration.ZERO
             val entries = timeSpentDao.getTimeSpentFromDay(LocalDate.now().toEpochDay())

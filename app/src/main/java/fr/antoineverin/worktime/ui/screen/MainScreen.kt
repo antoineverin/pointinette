@@ -74,8 +74,7 @@ fun MainScreen(
     }
 
     LaunchedEffect(viewModel) {
-        viewModel.fetchTimeSpentSummary()
-        viewModel.fetchCurrentDayEntries()
+        viewModel.fetchAll()
     }
 }
 
