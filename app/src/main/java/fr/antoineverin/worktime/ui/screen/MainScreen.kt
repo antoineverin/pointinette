@@ -80,7 +80,7 @@ fun MainScreen(
 
         val remainingHours = viewModel.getRemainingHoursPerDay()
             Text(
-                text = "You've to do :",
+                text = "You have to do :",
                 fontWeight = FontWeight.Bold,
                 )
         if (remainingHours != null)
