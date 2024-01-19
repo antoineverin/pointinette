@@ -22,28 +22,70 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 import kotlin.math.absoluteValue
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Surfing
+import androidx.compose.material.icons.filled.Work
+import androidx.compose.material3.Icon
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import fr.antoineverin.worktime.R
+
 
 @Composable
 fun MainScreen(
     navigate: (String) -> Unit,
     viewModel: MainScreenViewModel = hiltViewModel()
-) {
+)
+{
+    Text(
+        text = "42 Pointinette",
+        fontSize = 60.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_black)),
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .padding(bottom = 50.dp)
+            .padding(top = 40.dp)
+            .fillMaxWidth(),
+        style = androidx.compose.ui.text.TextStyle(
+            textAlign = TextAlign.Center,
+        )
+    )
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CurrentPeriod(period = YearMonth.now())
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(34.dp))
         TimeSpentSummary(
             hoursSpent = viewModel.getTimeDone(),
             hoursObjective = viewModel.getHoursObjective()
         )
         if (viewModel.getCurrentDayTimeSpent() != null) {
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(text = "Today you've worked:")
+            Spacer(modifier = Modifier.height(34.dp))
+            Text(
+                text = "Today you've worked :",
+                fontWeight = FontWeight.Bold,
+                )
             Text(text = viewModel.getCurrentDayTimeSpent()!!)
         }
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(34.dp))
+
+        val remainingHours = viewModel.getRemainingHoursPerDay()
+            Text(
+                text = "You've to do :",
+                fontWeight = FontWeight.Bold,
+                )
+        if (remainingHours != null)
+            Text(text = "${remainingHours.toHours()}h " +
+                    "${remainingHours.toMinutes() % 60}m per days")
         val remainingDifference = viewModel.getRemainingHoursDifference()
         if (remainingDifference != null)
             Text(
@@ -52,21 +94,46 @@ fun MainScreen(
                 color = if (remainingDifference.isNegative) Color.Red else Color.Green,
                 fontSize = 13.sp
             )
-        val remainingHours = viewModel.getRemainingHoursPerDay()
-        if (remainingHours != null)
-            Text(text = "Should do ${remainingHours.toHours()}h " +
-                    "${remainingHours.toMinutes() % 60}m / days")
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = { viewModel.addEntry(navigate) }) {
-            Text(text = "Work!")
+        Spacer(modifier = Modifier.height(70.dp))
+        Button(onClick = { viewModel.addEntry(navigate) },
+            modifier = Modifier
+                .size(width = 350.dp, height = 100.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Work,
+                    contentDescription = null,
+                    modifier = Modifier.size(55.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Work!",
+                    fontSize = 50.sp,
+                    )
+            }
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = { navigate(LIST_ENTRIES) }) {
-            Text(text = "List entries")
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = { navigate(LIST_VACATION) }) {
-            Text(text = "List vacations")
+        Spacer(modifier = Modifier.height(14.dp))
+        Row {
+            Button(onClick = { navigate(LIST_VACATION) }) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(imageVector = Icons.Default.Surfing, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "List Vacations",
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(onClick = { navigate(LIST_ENTRIES) }) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(imageVector = Icons.Default.List, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "List entries",
+                        fontWeight = FontWeight.Bold,
+                        )
+                }
+            }
         }
     }
 
@@ -79,7 +146,13 @@ fun MainScreen(
 @Composable
 private fun CurrentPeriod(period: YearMonth) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Current Period")
+        Text(
+            text = "Current Period :",
+            fontSize = 20.sp,
+            modifier = Modifier
+                .padding(top = 80.dp),
+            fontWeight = FontWeight.Bold,
+            )
         Text(text = "" + period.month.getDisplayName(TextStyle.FULL, Locale.FRANCE) + " " + period.year)
     }
 }
@@ -94,7 +167,10 @@ private fun TimeSpentSummary(
             Text(text = "...")
         else
             Text(text = "" + hoursSpent.toHours() + "h " + hoursSpent.toMinutes() % 60 + "m")
-        Text(text = "/")
+        Text(
+            text = "↓",
+            fontSize = 25.sp,
+            )
         Text(text = "" + hoursObjective + "h")
     }
 }
