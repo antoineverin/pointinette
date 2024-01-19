@@ -77,12 +77,11 @@ fun MainScreen(
             Text(text = viewModel.getCurrentDayTimeSpent()!!)
         }
         Spacer(modifier = Modifier.height(34.dp))
-
-        val remainingHours = viewModel.getRemainingHoursPerDay()
             Text(
                 text = "You have to do :",
                 fontWeight = FontWeight.Bold,
                 )
+        val remainingHours = viewModel.getRemainingHoursPerDay()
         if (remainingHours != null)
             Text(text = "${remainingHours.toHours()}h " +
                     "${remainingHours.toMinutes() % 60}m per days")
