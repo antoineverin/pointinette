@@ -36,7 +36,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun getHoursObjective(): Int {
-        return hoursObjective.intValue - daysOff.intValue
+        return hoursObjective.intValue - daysOff.intValue * 7
     }
 
     fun getRemainingHoursPerDay(): Duration? {
@@ -52,7 +52,7 @@ class MainScreenViewModel @Inject constructor(
     fun getCurrentDayTimeSpent(): String? {
         if (currentDayTimeSpent.value == null || currentDayTimeSpent.value == Duration.ZERO)
             return null
-        return LocalTime.ofSecondOfDay(currentDayTimeSpent.value!!.seconds)
+        return LocalTime.ofSecondOfDay(currentDayTimeSpent.value!!.seconds % 86399)
             .format(DateTimeFormatter.ofPattern("HH'h' mm'm'"))
     }
 
@@ -82,12 +82,17 @@ class MainScreenViewModel @Inject constructor(
                     time = time.plus(ld)
                 }
             }
+            timeSpentSummary.value = time
         }
     }
 
     private fun fetchCurrentMonthDaysOff() {
         viewModelScope.launch {
-            daysOff.intValue = vacationDao.getAllFromPeriod(YearMonth.now().toString()).size
+            var days = 0
+            vacationDao.getAllFromPeriod(YearMonth.now().toString()).forEach {
+                days += it.days
+            }
+            daysOff.intValue = days
         }
     }
 
