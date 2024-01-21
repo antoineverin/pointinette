@@ -28,7 +28,6 @@ class MainScreenViewModel @Inject constructor(
     private var timeSpentSummary = mutableStateOf<Duration?>(null)
     private var currentDayTimeSpent = mutableStateOf<Duration?>(null)
     private var hoursObjective = mutableIntStateOf(140)
-    private var daysOff = mutableIntStateOf(0)
     private var lastEntry = mutableStateOf<TimeSpent?>(null)
 
     fun getTimeDone(): Duration? {
@@ -36,7 +35,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun getHoursObjective(): Int {
-        return hoursObjective.intValue - daysOff.intValue * 7
+        return hoursObjective.intValue
     }
 
     fun getRemainingHoursPerDay(): Duration? {
@@ -46,13 +45,13 @@ class MainScreenViewModel @Inject constructor(
 
     fun getRemainingHoursDifference(): Duration? {
         if (getTimeDone() == null)  return null
-        return calculateHoursDifference(LocalDate.now(), getTimeDone()!!, getHoursObjective(), daysOff.intValue)
+        return calculateHoursDifference(LocalDate.now(), getTimeDone()!!, getHoursObjective())
     }
 
     fun getCurrentDayTimeSpent(): String? {
         if (currentDayTimeSpent.value == null || currentDayTimeSpent.value == Duration.ZERO)
             return null
-        return LocalTime.ofSecondOfDay(currentDayTimeSpent.value!!.seconds % 86399)
+        return LocalTime.ofSecondOfDay(currentDayTimeSpent.value!!.seconds)
             .format(DateTimeFormatter.ofPattern("HH'h' mm'm'"))
     }
 
@@ -65,14 +64,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun fetchAll()
-    {
-        fetchTimeSpentSummary()
-        fetchCurrentDayEntries()
-        fetchCurrentMonthDaysOff()
-    }
-
-    private fun fetchTimeSpentSummary() {
+    fun fetchTimeSpentSummary() {
         viewModelScope.launch {
             var time = Duration.ZERO
             timeSpentDao.getTimeSpentFromPeriod(YearMonth.now().toString()).forEach {
@@ -82,21 +74,18 @@ class MainScreenViewModel @Inject constructor(
                     time = time.plus(ld)
                 }
             }
+            
+            // Calculating month's hours objectives
             timeSpentSummary.value = time
-        }
-    }
-
-    private fun fetchCurrentMonthDaysOff() {
-        viewModelScope.launch {
-            var days = 0
+            var hours = 140
             vacationDao.getAllFromPeriod(YearMonth.now().toString()).forEach {
-                days += it.days
+                hours -= 7 * it.days
             }
-            daysOff.intValue = days
+            hoursObjective.intValue = hours
         }
     }
 
-    private fun fetchCurrentDayEntries() {
+    fun fetchCurrentDayEntries() {
         viewModelScope.launch {
             var duration = Duration.ZERO
             val entries = timeSpentDao.getTimeSpentFromDay(LocalDate.now().toEpochDay())

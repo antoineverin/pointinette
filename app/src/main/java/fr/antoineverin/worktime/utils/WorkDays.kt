@@ -6,9 +6,9 @@ import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.math.round
 
-fun calculateHoursDifference(at: LocalDate, hoursDone: Duration, hoursObjective: Int, daysOff: Int): Duration
+fun calculateHoursDifference(at: LocalDate, hoursDone: Duration, hoursObjective: Int): Duration
 {
-    val hoursPerDays = round(100f * hoursObjective / (getWorkDays(YearMonth.from(at)) - daysOff)) / 100
+    val hoursPerDays = round(100f * hoursObjective / getWorkDays(YearMonth.from(at))) / 100
     val hoursShouldHave = hoursPerDays * getSpentWorkDays(at)
     return hoursDone.minusMinutes((hoursShouldHave * 60).toLong())
 }
