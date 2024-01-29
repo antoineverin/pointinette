@@ -50,6 +50,7 @@ fun MainScreen(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
+            .padding(bottom = 50.dp, top = 50.dp),
     ) {
         Text(
             text = "42 Pointinette",
@@ -57,8 +58,7 @@ fun MainScreen(
             fontFamily = FontFamily(Font(R.font.roboto_black)),
             fontWeight = FontWeight.Bold,
             modifier = Modifier
-                .padding(bottom = 10.dp)
-                .padding(top = 10.dp),
+                .padding(bottom = 10.dp),
             style = androidx.compose.ui.text.TextStyle(
                 textAlign = TextAlign.Center,
             )
@@ -103,7 +103,7 @@ fun MainScreen(
         }
         Column(
             Modifier.fillMaxWidth().wrapContentHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
                 onClick = { viewModel.addEntry(navigate) },
@@ -114,7 +114,7 @@ fun MainScreen(
                     Icon(
                         imageVector = Icons.Default.Work,
                         contentDescription = null,
-                        modifier = Modifier.size(55.dp)
+                        modifier = Modifier.size(55.dp),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
