@@ -1,5 +1,6 @@
 package fr.antoineverin.worktime.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -33,7 +34,7 @@ class MainScreenViewModel @Inject constructor(
 
     fun getTimeDone(): Duration? {
         if (timeSpentSummary.value != null && currentDayTimeSpent.value != null)
-            return (currentDayTimeSpent.value!!.plus(currentDayTimeSpent.value))
+            return (currentDayTimeSpent.value!!.plus(timeSpentSummary.value))
         return currentDayTimeSpent.value
     }
 
@@ -78,7 +79,11 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch {
             var time = Duration.ZERO
             timeSpentDao.getTimeSpentFromPeriod(YearMonth.now().toString()).forEach {
-                if(it.to != null && it.date != LocalDate.now()) {
+                Log.d("MI", "compare ${it.date} to ${LocalDate.now()} = ${it.date.compareTo(LocalDate.now())}")
+                if (it.date.compareTo(LocalDate.now()) == 0)
+                    return@forEach
+                Log.d("MI", "adding ${it.date}")
+                if(it.to != null) {
                     var ld = Duration.ofSeconds(it.to!!.toSecondOfDay().toLong())
                     ld = ld.minusSeconds(it.from.toSecondOfDay().toLong())
                     time = time.plus(ld)
