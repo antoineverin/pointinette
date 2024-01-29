@@ -50,15 +50,14 @@ fun MainScreen(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
+            .padding(bottom = 30.dp)
+            .padding(top = 30.dp),
     ) {
         Text(
-            text = "42 Pointinette",
+            text = "ft_pointinette",
             fontSize = 50.sp,
             fontFamily = FontFamily(Font(R.font.roboto_black)),
             fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .padding(bottom = 10.dp)
-                .padding(top = 10.dp),
             style = androidx.compose.ui.text.TextStyle(
                 textAlign = TextAlign.Center,
             )
