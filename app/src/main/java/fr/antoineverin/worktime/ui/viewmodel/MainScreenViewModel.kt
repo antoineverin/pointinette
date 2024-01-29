@@ -32,7 +32,9 @@ class MainScreenViewModel @Inject constructor(
     private var lastEntry = mutableStateOf<TimeSpent?>(null)
 
     fun getTimeDone(): Duration? {
-        return timeSpentSummary.value
+        if (timeSpentSummary.value != null && currentDayTimeSpent.value != null)
+            return (currentDayTimeSpent.value!!.plus(currentDayTimeSpent.value))
+        return currentDayTimeSpent.value
     }
 
     fun getHoursObjective(): Int {
@@ -41,12 +43,12 @@ class MainScreenViewModel @Inject constructor(
 
     fun getRemainingHoursPerDay(): Duration? {
         if (getTimeDone() == null) return null
-        return calculateHoursPerDays(LocalDate.now(), getTimeDone()!!, getHoursObjective())
+        return calculateHoursPerDays(LocalDate.now(), timeSpentSummary.value!!, getHoursObjective())
     }
 
     fun getRemainingHoursDifference(): Duration? {
         if (getTimeDone() == null)  return null
-        return calculateHoursDifference(LocalDate.now(), getTimeDone()!!, getHoursObjective(), daysOff.intValue)
+        return calculateHoursDifference(LocalDate.now(), timeSpentSummary.value!!, getHoursObjective(), daysOff.intValue)
     }
 
     fun getCurrentDayTimeSpent(): String? {
@@ -76,7 +78,7 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch {
             var time = Duration.ZERO
             timeSpentDao.getTimeSpentFromPeriod(YearMonth.now().toString()).forEach {
-                if(it.to != null) {
+                if(it.to != null && it.date != LocalDate.now()) {
                     var ld = Duration.ofSeconds(it.to!!.toSecondOfDay().toLong())
                     ld = ld.minusSeconds(it.from.toSecondOfDay().toLong())
                     time = time.plus(ld)
