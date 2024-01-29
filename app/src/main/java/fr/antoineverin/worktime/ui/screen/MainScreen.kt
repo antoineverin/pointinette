@@ -45,20 +45,11 @@ fun MainScreen(
         }
         Spacer(modifier = Modifier.height(24.dp))
         if (viewModel.getTimeDone() != null
-            && viewModel.getTimeDone()!!.toHours() < viewModel.getHoursObjective()) {
-            val remainingDifference = viewModel.getRemainingHoursDifference()
-            if (remainingDifference != null)
-                Text(
-                    text = "${remainingDifference.toHours()}h " +
-                            "${remainingDifference.toMinutes().absoluteValue % 60}m",
-                    color = if (remainingDifference.isNegative) Color.Red else Color.Green,
-                    fontSize = 13.sp
-                )
-            val remainingHours = viewModel.getRemainingHoursPerDay()
-            if (remainingHours != null)
-                Text(text = "Should do ${remainingHours.toHours()}h " +
-                        "${remainingHours.toMinutes() % 60}m / days")
-        }
+            && viewModel.getTimeDone()!!.toHours() < viewModel.getHoursObjective())
+            HoursPrediction(
+                remainingDifference = viewModel.getRemainingHoursDifference(),
+                remainingHours = viewModel.getRemainingHoursPerDay()
+            )
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = { viewModel.addEntry(navigate) }) {
             Text(text = "Work!")
@@ -99,4 +90,22 @@ private fun TimeSpentSummary(
         Text(text = "/")
         Text(text = "" + hoursObjective + "h")
     }
+}
+
+@Composable
+private fun HoursPrediction(
+    remainingDifference: Duration?,
+    remainingHours: Duration?
+) {
+    if (remainingDifference != null)
+        Text(
+            text = "${remainingDifference.toHours()}h " +
+                    "${remainingDifference.toMinutes().absoluteValue % 60}m",
+            color = if (remainingDifference.isNegative) Color.Red else Color.Green,
+            fontSize = 13.sp
+        )
+    if (remainingHours != null)
+        Text(text = "Should do ${remainingHours.toHours()}h " +
+                "${remainingHours.toMinutes() % 60}m / days")
+    Text(text = "hours maybe false", fontSize = 10.sp)
 }
