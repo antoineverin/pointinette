@@ -79,10 +79,8 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch {
             var time = Duration.ZERO
             timeSpentDao.getTimeSpentFromPeriod(YearMonth.now().toString()).forEach {
-                Log.d("MI", "compare ${it.date} to ${LocalDate.now()} = ${it.date.compareTo(LocalDate.now())}")
                 if (it.date.compareTo(LocalDate.now()) == 0)
                     return@forEach
-                Log.d("MI", "adding ${it.date}")
                 if(it.to != null) {
                     var ld = Duration.ofSeconds(it.to!!.toSecondOfDay().toLong())
                     ld = ld.minusSeconds(it.from.toSecondOfDay().toLong())
