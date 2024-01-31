@@ -56,13 +56,15 @@ private fun getRemainingWorkDays(at: LocalDate): Int {
     var workdays = 0
     var i = at.dayOfMonth
 
-    while (month.isValidDay(++i))
-    {
+    while (month.isValidDay(i)) {
         val dayOfWeek = month.atDay(i).dayOfWeek
         if (dayOfWeek != DayOfWeek.SATURDAY
-            && dayOfWeek != DayOfWeek.SUNDAY)
+            && dayOfWeek != DayOfWeek.SUNDAY
+        )
             workdays++
+        if (i == month.lengthOfMonth())
+            break
+        i++
     }
-
     return workdays
 }
