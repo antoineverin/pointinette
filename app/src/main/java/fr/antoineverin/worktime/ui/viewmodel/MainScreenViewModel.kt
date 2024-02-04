@@ -42,7 +42,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun getRemainingHoursPerDay(): Duration? {
-        if (getTimeDone() == null) return null
+        if (timeSpentSummary.value == null) return null
         return calculateHoursPerDays(LocalDate.now(), timeSpentSummary.value!!, getHoursObjective())
     }
 
