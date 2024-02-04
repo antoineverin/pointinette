@@ -71,8 +71,10 @@ fun EditEntryScreen(
     }
 }
 
-
-
 fun checkDigitAndRange(value: String, range: IntRange): Boolean {
-    return value.isDigitsOnly() && (value == "" || value.toInt() in range)
+    return try {
+        value.isDigitsOnly() && (value == "" || value.toInt() in range)
+    }catch (e: NumberFormatException) {
+        false
+    }
 }
