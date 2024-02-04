@@ -14,7 +14,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import fr.antoineverin.worktime.ui.screen.checkDigitAndRange
-import java.time.DateTimeException
 import java.time.LocalTime
 
 @Composable
@@ -66,7 +65,7 @@ data class TimeFieldValue(
         return try {
             LocalTime.of(hours.toInt(), minutes.toInt())
             true
-        }catch (e: DateTimeException) {
+        }catch (e: Exception) {
             false
         }
     }

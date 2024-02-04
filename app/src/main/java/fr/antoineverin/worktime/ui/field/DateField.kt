@@ -14,7 +14,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import fr.antoineverin.worktime.ui.screen.checkDigitAndRange
-import java.time.DateTimeException
 import java.time.LocalDate
 
 
@@ -77,7 +76,7 @@ data class DateFieldValue(
         return try {
             LocalDate.of(year.toInt(), month.toInt(), day.toInt())
             true
-        }catch (e: DateTimeException) {
+        }catch (e: Exception) {
             false
         }
     }

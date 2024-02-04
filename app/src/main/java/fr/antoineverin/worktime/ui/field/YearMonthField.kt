@@ -14,7 +14,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import fr.antoineverin.worktime.ui.screen.checkDigitAndRange
-import java.time.DateTimeException
 import java.time.YearMonth
 
 @Composable
@@ -66,7 +65,7 @@ data class YearMonthValue(
         return try {
             YearMonth.of(year.toInt(), month.toInt())
             true
-        }catch (e: DateTimeException) {
+        }catch (e: Exception) {
             false
         }
     }
