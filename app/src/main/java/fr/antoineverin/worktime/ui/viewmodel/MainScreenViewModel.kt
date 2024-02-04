@@ -48,7 +48,7 @@ class MainScreenViewModel @Inject constructor(
 
     fun getRemainingHoursDifference(): Duration? {
         if (getTimeDone() == null)  return null
-        return calculateHoursDifference(LocalDate.now(), timeSpentSummary.value!!, getHoursObjective(), daysOff.intValue)
+        return calculateHoursDifference(LocalDate.now(), getTimeDone()!!, getHoursObjective(), daysOff.intValue)
     }
 
     fun getCurrentDayTimeSpent(): String? {
