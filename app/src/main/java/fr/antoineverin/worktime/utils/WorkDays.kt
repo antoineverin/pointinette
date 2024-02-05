@@ -16,7 +16,7 @@ fun calculateHoursDifference(at: LocalDate, hoursDone: Duration, hoursObjective:
 fun calculateHoursPerDays(at: LocalDate, hoursDone: Duration, hoursObjective: Int): Duration
 {
     val remainingMinutes = Duration.ofHours(hoursObjective.toLong()).minus(hoursDone).toMinutes()
-    val minutesPerDay = remainingMinutes.toFloat() / getRemainingWorkDays(at)
+    val minutesPerDay = remainingMinutes.toFloat() / (getRemainingWorkDays(at) + 1)
     return Duration.ofMinutes(minutesPerDay.toLong())
 }
 
