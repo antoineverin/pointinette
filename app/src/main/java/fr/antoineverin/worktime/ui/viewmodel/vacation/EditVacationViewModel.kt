@@ -20,10 +20,15 @@ class EditVacationViewModel @Inject constructor(
     val period = mutableStateOf(YearMonthValue("", ""))
     val days = mutableStateOf("0")
     val isValid = mutableStateOf(false)
+    val comment = mutableStateOf("")
+
+    companion object {
+        const val MAX_COMMENT_CHARS = 20
+    }
 
     fun fetchEntry(id: Int) {
         if (id == 0) {
-            setupFields(Vacation(0, YearMonth.now(), 0))
+            setupFields(Vacation(0, YearMonth.now(), 0, comment = null))
             return
         }
 
@@ -33,7 +38,7 @@ class EditVacationViewModel @Inject constructor(
     }
 
     fun checkFieldsValidity(): Boolean {
-        if (period.value.isEmpty() || days.value.isEmpty())
+        if (period.value.isEmpty() || days.value.isEmpty() || comment.value.length > MAX_COMMENT_CHARS)
             isValid.value = false
         else
             isValid.value = period.value.isValid()
@@ -48,6 +53,7 @@ class EditVacationViewModel @Inject constructor(
 
         vacation.period = period.value.toYearMonth()
         vacation.days = days.value.toInt()
+        vacation.comment = comment.value
 
         viewModelScope.launch {
             if (vacation.id == 0)

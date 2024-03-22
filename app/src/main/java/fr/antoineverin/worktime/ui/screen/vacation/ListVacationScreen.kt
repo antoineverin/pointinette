@@ -80,6 +80,7 @@ fun VacationItem(
         Column {
             Text(text = vacation.period.format(DateTimeFormatter.ofPattern("MMMM yyyy")))
             Text(text = "" + vacation.days + " days")
+            Text(text = vacation.comment.orEmpty())
         }
         Row {
             IconButton(onClick = { edit(vacation) }) {
@@ -96,6 +97,6 @@ fun VacationItem(
 @Composable
 fun VacationItemPreview() {
     WorktimeTheme {
-        VacationItem(Vacation(0, YearMonth.now(), 5), { }, { })
+        VacationItem(Vacation(0, YearMonth.now(), 5, comment = "Maladie vraiment cool"), { }, { })
     }
 }
