@@ -8,5 +8,6 @@ import java.time.YearMonth
 data class Vacation(
     @PrimaryKey(autoGenerate = true) var id: Int,
     var period: YearMonth,
-    var days: Int
+    var days: Int,
+    var comment: String?
 )
