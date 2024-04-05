@@ -14,8 +14,8 @@ android {
         applicationId = "fr.antoineverin.worktime"
         minSdk = 30
         targetSdk = 34
-        versionCode = 21
-        versionName = "1.5.5"
+        versionCode = 23
+        versionName = "1.5.7"
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
@@ -35,6 +35,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        getByName("debug") {
+            applicationIdSuffix = ".dev"
+            isDebuggable = true
         }
     }
     compileOptions {
