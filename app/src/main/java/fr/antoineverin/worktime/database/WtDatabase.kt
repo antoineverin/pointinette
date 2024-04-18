@@ -10,12 +10,13 @@ import fr.antoineverin.worktime.database.dao.VacationDao
 import fr.antoineverin.worktime.database.entities.TimeSpent
 import fr.antoineverin.worktime.database.entities.Vacation
 
-@Database(version = 2, exportSchema = true, entities = [
+@Database(version = 3, exportSchema = true, entities = [
         TimeSpent::class,
         Vacation::class
     ],
     autoMigrations = [
-        AutoMigration(from = 1, to = 2)
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3)
     ]
 )
 @TypeConverters(DateConverter::class)
