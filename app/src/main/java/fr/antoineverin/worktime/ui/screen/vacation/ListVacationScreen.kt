@@ -77,9 +77,9 @@ fun VacationItem(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
-            Text(text = vacation.period.format(DateTimeFormatter.ofPattern("MMMM yyyy")))
-            Text(text = "" + vacation.days + " days")
+        Column(Modifier.weight(1f)) {
+            Text(text = vacation.period.format(DateTimeFormatter.ofPattern("MMMM yyyy")) + ", " + vacation.days + " days")
+            Text(text = vacation.type.toString())
             Text(text = vacation.comment.orEmpty())
         }
         Row {

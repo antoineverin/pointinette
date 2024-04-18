@@ -1,5 +1,6 @@
 package fr.antoineverin.worktime.ui.viewmodel.vacation
 
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,7 @@ class EditVacationViewModel @Inject constructor(
     val period = mutableStateOf(YearMonthValue("", ""))
     val days = mutableStateOf("0")
     val isValid = mutableStateOf(false)
+    val type = mutableIntStateOf(0)
     val comment = mutableStateOf("")
 
     companion object {
@@ -54,6 +56,7 @@ class EditVacationViewModel @Inject constructor(
         vacation.period = period.value.toYearMonth()
         vacation.days = days.value.toInt()
         vacation.comment = comment.value
+        vacation.type = Vacation.VacationType.values()[type.intValue]
 
         viewModelScope.launch {
             if (vacation.id == 0)
@@ -70,6 +73,8 @@ class EditVacationViewModel @Inject constructor(
             vacation.period.monthValue.toString(),
             vacation.period.year.toString())
         days.value = vacation.days.toString()
+        comment.value = vacation.comment ?: ""
+        type.intValue = vacation.type.ordinal
         checkFieldsValidity()
     }
 
