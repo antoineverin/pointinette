@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "5f3e51941e6ee009488b88db28481d7c",
+    "identityHash": "412d62ee77c94b7b0e6e25b36f932d3a",
     "entities": [
       {
         "tableName": "time_spent",
@@ -50,7 +50,7 @@
       },
       {
         "tableName": "vacation",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `period` TEXT NOT NULL, `days` INTEGER NOT NULL, `type` TEXT NOT NULL DEFAULT '0', `comment` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `period` TEXT NOT NULL, `days` INTEGER NOT NULL, `type` TEXT NOT NULL DEFAULT 'OTHER', `comment` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -75,7 +75,7 @@
             "columnName": "type",
             "affinity": "TEXT",
             "notNull": true,
-            "defaultValue": "'0'"
+            "defaultValue": "'OTHER'"
           },
           {
             "fieldPath": "comment",
@@ -97,7 +97,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5f3e51941e6ee009488b88db28481d7c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '412d62ee77c94b7b0e6e25b36f932d3a')"
     ]
   }
 }

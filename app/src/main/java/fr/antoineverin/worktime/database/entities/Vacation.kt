@@ -10,7 +10,7 @@ data class Vacation(
     @PrimaryKey(autoGenerate = true) var id: Int,
     var period: YearMonth,
     var days: Int,
-    @ColumnInfo(defaultValue = "0") var type: VacationType = VacationType.OTHER,
+    @ColumnInfo(defaultValue = "OTHER") var type: VacationType = VacationType.OTHER,
     var comment: String?,
 ) {
 
